@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7089659962968462590}
   - component: {fileID: 8688110076262495699}
   - component: {fileID: 5747430080007891094}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Good 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -146,3 +146,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e089a8d56dcd7845b0700d53674c82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointValue: 2
+  explosionParticle: {fileID: 6601538019107920666, guid: 70a1428e5f80a4866a779ef1ab9fe521, type: 3}

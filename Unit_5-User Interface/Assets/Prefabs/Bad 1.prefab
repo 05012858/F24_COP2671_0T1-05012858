@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 8053720390955495158}
   - component: {fileID: 5414077241210909484}
   - component: {fileID: 1722851253388562243}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bad 1
-  m_TagString: Untagged
+  m_TagString: Bad
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -127,7 +127,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -168,3 +168,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e089a8d56dcd7845b0700d53674c82b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pointValue: -20
+  explosionParticle: {fileID: 4758139293545943008, guid: c7ad2532a6eeb40b59033c75e71fa054, type: 3}
