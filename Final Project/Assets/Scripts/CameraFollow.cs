@@ -38,7 +38,7 @@ public class CameraFollow : MonoBehaviour
         transform.position = new Vector3(0.48f, -3.88f, -111.84f);
     }
 
-    private void LateUpdate()
+    public void LateUpdate()
     {
         // Calculate the average position of the players
         Vector3 averagePosition = (player1.position + player2.position) / 2;

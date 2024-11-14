@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public int playerCoins = 0; // Player's coin count
     public int totalCoins = 0; // Total coins in the level
     public int playerTime = 1;   // Default player time
+    public bool isPaused = false;
     public TMP_Text coinText;     // Reference to the UI Text for coins
     public TMP_Text shopCoinText; // Reference to the UI Text for coins in the shop
     public TMP_Text playerTimeText;
@@ -16,17 +17,20 @@ public class GameManager : MonoBehaviour
     public TMP_Text priceSpeedText;
     public TMP_Text priceJumpText;
     public GameObject mainMenuCanvas;
+    public GameObject pauseMenuCanvas;
     public GameObject tutorialCanvas;
     public GameObject mainGameCanvas;
     public GameObject shopCanvas;
     public GameObject youLoseCanvas;
+    public GameObject tutorialCoin;
     public AudioSource gameOverMusic;
     public AudioSource backgroundMusic;
     public AudioSource shopMusic;
     public AudioSource coinSound; // Coin sound reference
 
     // Reference to the player's transform
-    public Transform player; // Assign in the Inspector
+    public Transform tutorialPlayer; // Assign in the Inspector
+    public Transform player;
     private Vector3 originalPlayerPosition;
 
     // Store the additional time purchased by the player
@@ -58,7 +62,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         ShowMainMenu();
-        originalPlayerPosition = player.position; // Store original position
+        originalPlayerPosition = tutorialPlayer.position; // Store original position
         UpdateCoinUI(); // Update UI initially
         UpdatePriceUI(); // Update price UI initially
     }
@@ -67,7 +71,32 @@ public class GameManager : MonoBehaviour
     {
         CheckWinCondition();
 
+        // Check for pause key (P key in this example)
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (isPaused)
+                ResumeGame();
+            else
+                PauseGame();
+        }
+    }
 
+    public void PauseGame()
+    {
+        isPaused = true;
+        pauseMenuCanvas.SetActive(true); // Show pause menu
+        Time.timeScale = 0f; // Freeze game time
+        backgroundMusic.Pause(); // Pause background music
+        if (shopMusic.isPlaying) shopMusic.Pause(); // Pause shop music if active
+    }
+
+    public void ResumeGame()
+    {
+        isPaused = false;
+        pauseMenuCanvas.SetActive(false); // Hide pause menu
+        Time.timeScale = 1f; // Resume game time
+        backgroundMusic.UnPause(); // Resume background music
+        if (shopMusic.isPlaying) shopMusic.UnPause(); // Resume shop music if active
     }
 
     public void YouLost()
@@ -78,6 +107,7 @@ public class GameManager : MonoBehaviour
         mainGameCanvas.SetActive(false);
         shopCanvas.SetActive(false);
         youLoseCanvas.SetActive(true);
+        pauseMenuCanvas.SetActive(false);
 
 
         backgroundMusic.Stop();
@@ -89,6 +119,9 @@ public class GameManager : MonoBehaviour
 
     public void ShowMainMenu()
     {
+        ResetPlayerStats();
+
+
         CoinPool coinPool = FindObjectOfType<CoinPool>();
         if (coinPool != null)
         {
@@ -101,27 +134,66 @@ public class GameManager : MonoBehaviour
             }
         }
 
+
+
         backgroundMusic.Play();
         mainMenuCanvas.SetActive(true);
         tutorialCanvas.SetActive(false);
         mainGameCanvas.SetActive(false);
         shopCanvas.SetActive(false);
         youLoseCanvas.SetActive(false);
+
+    }
+
+    public void ResetPlayerStats()
+    {
+        player.position = originalPlayerPosition;
+        tutorialPlayer.position = originalPlayerPosition;
+        playerCoins = 5;
+        playerTime = 1;
+        totalCoins = 0;
+        playerSpeed = 5.0f;
+        jumpPower = 32.0f;
+        additionalTime = 0;
+
+        currentPrice = 5;
+        currentPriceJump = 3;
+        speedUpgradeCost = 10;
     }
 
     public void StartTutorial()
     {
-        player.position = originalPlayerPosition;
+        CameraFollow.instance.ResetCamera();
+
+        tutorialCoin.SetActive(true);
 
         mainMenuCanvas.SetActive(false);
         tutorialCanvas.SetActive(true);
         mainGameCanvas.SetActive(false);
         shopCanvas.SetActive(false);
         youLoseCanvas.SetActive(false);
+
+
+        tutorialPlayer.position = originalPlayerPosition;
+
+        CoinPool coinPool = FindObjectOfType<CoinPool>();
+        if (coinPool != null)
+        {
+            foreach (GameObject coin in coinPool.coins)
+            {
+                if (coin.activeInHierarchy)
+                {
+                    coin.SetActive(true);
+                }
+            }
+        }
     }
 
     public void StartGame()
     {
+
+
+
         shopMusic.Stop();
         backgroundMusic.Play();
 
@@ -130,6 +202,7 @@ public class GameManager : MonoBehaviour
         mainGameCanvas.SetActive(true);
         shopCanvas.SetActive(false);
         youLoseCanvas.SetActive(false);
+
 
         player.position = originalPlayerPosition; // Reset player's position
         playerTime = 1 + additionalTime; // Set player time to default + additional time
@@ -140,11 +213,15 @@ public class GameManager : MonoBehaviour
             YouLost();
         }
 
+
+
     }
 
     public void GoToShop()
     {
         CameraFollow.instance.ResetCamera();
+
+
 
         mainMenuCanvas.SetActive(false);
         tutorialCanvas.SetActive(false);
