@@ -135,13 +135,13 @@ public class GameManager : MonoBehaviour
         }
 
 
-
+        youLoseCanvas.SetActive(false);
         backgroundMusic.Play();
         mainMenuCanvas.SetActive(true);
         tutorialCanvas.SetActive(false);
         mainGameCanvas.SetActive(false);
         shopCanvas.SetActive(false);
-        youLoseCanvas.SetActive(false);
+        
 
     }
 

@@ -3,6 +3,7 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
     private Vector3 originalPosition;
+    public ParticleSystem coinCollectedParticles; // Reference to the particle system prefab
 
     private void Start()
     {
@@ -14,7 +15,22 @@ public class Coin : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            GameManager.instance.AddCoins(1); // Call GameManager to add coins
+            // Trigger particle effect
+            if (coinCollectedParticles != null)
+            {
+                ParticleSystem instantiatedParticles = Instantiate(coinCollectedParticles, transform.position, Quaternion.identity);
+                instantiatedParticles.Play();
+                Destroy(instantiatedParticles.gameObject, instantiatedParticles.main.duration);
+                Debug.Log("Particle system instantiated at: " + transform.position);
+            }
+            else
+            {
+                Debug.LogWarning("coinCollectedParticles is not assigned!");
+            }
+
+
+            // Add coins and return the coin to the pool
+            GameManager.instance.AddCoins(1);
             CoinPool coinPool = FindObjectOfType<CoinPool>(); // Reference to the CoinPool
             coinPool.ReturnCoin(gameObject); // Return this coin to the pool
             Debug.Log("Coin Collected!");

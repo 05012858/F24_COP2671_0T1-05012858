@@ -15,6 +15,7 @@ TagManager:
   - MainGame
   - YouLose
   - Spike
+  - Jump Particle
   layers:
   - Default
   - TransparentFX

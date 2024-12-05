@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private bool isGrounded;
 
+
     public float jumpPower = 2.0f;
     public float playerHearts = 3.0f;
 
